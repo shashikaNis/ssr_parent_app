@@ -1,40 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ssr_parent_app/pages/login/login_service.dart';
 import 'package:ssr_parent_app/ssr_parent_app.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-
-  static String _email = '';
-  static String _password = '';
-
-  static onClickLogin(BuildContext context){
-    LoginService.login(_email, _password, context);
-  }
-
-  @override
-  void initState() {
-    // methanin wenne log welada inne kila balan inno
-    FirebaseAuth.instance
-        .authStateChanges()
-        .listen((User? user) {
-      if (user != null) {
-        context.go('/home');
-      }
-    });
-
-    super.initState();
-  }
-
+class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
                 Image(image: AssetImage('assets/images/ssr_logo.png')),
                 SizedBox(height: 35),
                 Text(
-                  "LOGIN",
+                  "REGISTER",
                   style: TextStyle(
                     fontSize: 32,
                     color: Color(0xFF65558F),
@@ -65,8 +41,22 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       TextFormField(
                         decoration: InputDecoration(
-                            labelText: 'Email', border: OutlineInputBorder(),),
-                        onChanged: (value)=> {_email=value},
+                            labelText: 'Email', border: OutlineInputBorder()),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            labelText: 'Full Name',
+                            border: OutlineInputBorder()),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            labelText: 'Phone Number', border: OutlineInputBorder()),
                       ),
                       SizedBox(
                         height: 20,
@@ -74,8 +64,15 @@ class _LoginPageState extends State<LoginPage> {
                       TextFormField(
                         decoration: const InputDecoration(
                             labelText: 'Password',
-                            border: OutlineInputBorder(),),
-                        onChanged: (value)=>{_password=value},
+                            border: OutlineInputBorder()),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            labelText: 'Confirm Password',
+                            border: OutlineInputBorder()),
                       ),
                       const SizedBox(
                         height: 20,
@@ -83,9 +80,9 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: ()=>onClickLogin(context),
+                          onPressed: () => {},
                           child: const Text(
-                            'Lgin',
+                            'Register',
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(
@@ -98,9 +95,9 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 30,
                 ),
-                Row(
+                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text("Don’t have account? "), TextButton(onPressed: (){context.go('/register');}, child:Text('Create One.'))],
+                  children: [const Text("Already have account? "), TextButton(onPressed: (){context.go('/login');}, child: Text('Login.'))],
                 )
               ],
             ),
