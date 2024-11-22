@@ -1,103 +1,123 @@
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ssr_parent_app/ssr_parent_app.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ssr_parent_app/service/auth_service.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignupPage> createState() => SignupPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class SignupPageState extends State<SignupPage> {
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
+  TextEditingController fullnamecontroller = TextEditingController();
+  TextEditingController phonenumbercontroller = TextEditingController();
+  TextEditingController confirmpasswordcontroller = TextEditingController();
+
+  onclickRegister() {
+    AuthService.register(emailcontroller.text, passwordcontroller.text,
+        phonenumbercontroller.text, fullnamecontroller.text);
+  }
+
+  @override
+  void initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        context.go("/home");
+        print('User is signed in!');
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 50,
-            vertical: 10,
-          ),
-          child: Center(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(40),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image(image: AssetImage('assets/images/ssr_logo.png')),
-                SizedBox(height: 35),
-                Text(
-                  "REGISTER",
-                  style: TextStyle(
-                    fontSize: 32,
-                    color: Color(0xFF65558F),
-                  ),
+                Image(
+                  image: AssetImage("assets/images/ssr_logo.png"),
                 ),
-                SizedBox(
-                  height: 30,
+                Text(
+                  "Register",
+                  style: TextStyle(fontSize: 30),
                 ),
                 Form(
                   child: Column(
                     children: [
                       TextFormField(
                         decoration: InputDecoration(
-                            labelText: 'Email', border: OutlineInputBorder()),
+                          labelText: "Email",
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: emailcontroller,
                       ),
                       SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: 'Full Name',
-                            border: OutlineInputBorder()),
-                      ),
-                      const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                            labelText: 'Phone Number', border: OutlineInputBorder()),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder()),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: 'Confirm Password',
-                            border: OutlineInputBorder()),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => {},
-                          child: const Text(
-                            'Register',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF65558F)),
+                          labelText: "Full Name",
+                          border: OutlineInputBorder(),
                         ),
-                      )
+                        controller: fullnamecontroller,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Phone Number",
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: phonenumbercontroller,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: passwordcontroller,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Confirm Password",
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: confirmpasswordcontroller,
+                      ),
+                      SizedBox(width: double.infinity,child: ElevatedButton(
+                        onPressed: onclickRegister,
+                        child: const Text("Register", style: TextStyle(color: Colors.white),),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF65558F)
+                        ),
+                      ),)
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [const Text("Already have account? "), TextButton(onPressed: (){context.go('/login');}, child: Text('Login.'))],
+                TextButton(
+                  onPressed: () {
+                    context.go("/login");
+                  },
+                  child: Text("Allready have account?Login"),
                 )
               ],
             ),

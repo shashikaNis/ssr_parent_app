@@ -1,111 +1,98 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:ssr_parent_app/pages/login/login_service.dart';
-import 'package:ssr_parent_app/ssr_parent_app.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ssr_parent_app/service/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPage> createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-
-  static String _email = '';
-  static String _password = '';
-
-  static onClickLogin(BuildContext context){
-    LoginService.login(_email, _password, context);
-  }
+class LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController PasswordController = TextEditingController();
 
   @override
   void initState() {
-    // methanin wenne log welada inne kila balan inno
-    FirebaseAuth.instance
-        .authStateChanges()
-        .listen((User? user) {
-      if (user != null) {
-        context.go('/home');
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        context.go("/home");
+        print('User is signed in!');
       }
     });
-
     super.initState();
+  }
+
+  onclickLogin() {
+    AuthService.login(emailController.text, PasswordController.text);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 50,
-            vertical: 10,
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image(image: AssetImage('assets/images/ssr_logo.png')),
-                SizedBox(height: 35),
-                Text(
-                  "LOGIN",
-                  style: TextStyle(
-                    fontSize: 32,
-                    color: Color(0xFF65558F),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Form(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: InputDecoration(
-                            labelText: 'Email', border: OutlineInputBorder(),),
-                        onChanged: (value)=> {_email=value},
+        child: Center(
+            child: Padding(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Image(
+                image: AssetImage("assets/images/ssr_logo.png"),
+              ),
+              Text(
+                "Login",
+                style: TextStyle(fontSize: 30),
+              ),
+              Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Email",
+                        border: OutlineInputBorder(),
                       ),
-                      SizedBox(
-                        height: 20,
+                      controller: emailController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Password",
+                        border: OutlineInputBorder(),
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder(),),
-                        onChanged: (value)=>{_password=value},
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: ()=>onClickLogin(context),
-                          child: const Text(
-                            'Lgin',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF65558F)),
+                      controller: PasswordController,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: onclickLogin,
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(color: Colors.white),
                         ),
-                      )
-                    ],
-                  ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF65558F)),
+                      ),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text("Don’t have account? "), TextButton(onPressed: (){context.go('/register');}, child:Text('Create One.'))],
-                )
-              ],
-            ),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.go("/register");
+                },
+                child: const Text("Don't have account? Create one"),
+              )
+            ],
           ),
-        ),
+        )),
       ),
     );
   }
