@@ -38,19 +38,26 @@ class LoginPageState extends State<LoginPage> {
         child: Center(
             child: Padding(
           padding: const EdgeInsets.all(40),
-          child: Column(
+          child : Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Image(
                 image: AssetImage("assets/images/ssr_logo.png"),
               ),
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 "Login",
-                style: TextStyle(fontSize: 30),
+                style:TextStyle(fontSize: 30,color:Colors.purple),
+              ),
+              SizedBox(
+                height: 100,
               ),
               Form(
                 child: Column(
+
                   children: [
                     TextFormField(
                       decoration: const InputDecoration(
@@ -60,7 +67,7 @@ class LoginPageState extends State<LoginPage> {
                       controller: emailController,
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     TextFormField(
                       decoration: const InputDecoration(
@@ -68,6 +75,9 @@ class LoginPageState extends State<LoginPage> {
                         border: OutlineInputBorder(),
                       ),
                       controller: PasswordController,
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     SizedBox(
                       width: double.infinity,

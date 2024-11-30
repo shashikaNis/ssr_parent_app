@@ -49,9 +49,15 @@ class SignupPageState extends State<SignupPage> {
                 Image(
                   image: AssetImage("assets/images/ssr_logo.png"),
                 ),
-                Text(
-                  "Register",
-                  style: TextStyle(fontSize: 30),
+                SizedBox(
+                  height: 30,
+                ),
+                 Text(
+                 "Register",
+                  style: TextStyle(fontSize: 30,color: Colors.purple),
+                ),
+                SizedBox(
+                  height: 100,
                 ),
                 Form(
                   child: Column(
@@ -64,7 +70,7 @@ class SignupPageState extends State<SignupPage> {
                         controller: emailcontroller,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       TextFormField(
                         decoration: InputDecoration(
@@ -74,7 +80,7 @@ class SignupPageState extends State<SignupPage> {
                         controller: fullnamecontroller,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       TextFormField(
                         decoration: InputDecoration(
@@ -84,7 +90,7 @@ class SignupPageState extends State<SignupPage> {
                         controller: phonenumbercontroller,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       TextFormField(
                         decoration: InputDecoration(
@@ -94,7 +100,7 @@ class SignupPageState extends State<SignupPage> {
                         controller: passwordcontroller,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       TextFormField(
                         decoration: InputDecoration(
@@ -102,6 +108,9 @@ class SignupPageState extends State<SignupPage> {
                           border: OutlineInputBorder(),
                         ),
                         controller: confirmpasswordcontroller,
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       SizedBox(width: double.infinity,child: ElevatedButton(
                         onPressed: onclickRegister,

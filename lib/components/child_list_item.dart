@@ -4,13 +4,14 @@ import 'package:go_router/go_router.dart';
 class ChildListItem extends StatelessWidget {
   final Color dotColors;
   final String name;
+  final String id;
 
-  const ChildListItem({super.key, required this.dotColors, required this.name});
+  const ChildListItem({super.key, required this.dotColors, required this.name, required this.id});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){context.go('/child');},
+      onTap: (){context.go('/child/${id}');},
       child: Container(
         margin: EdgeInsets.only(top: 10, left: 5, right: 5),
         padding: const EdgeInsets.all(10),

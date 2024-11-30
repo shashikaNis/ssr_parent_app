@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ssr_parent_app/pages/Route/route.dart';
 import 'package:ssr_parent_app/pages/Signup/signup_page.dart';
 import 'package:ssr_parent_app/pages/child/child_page.dart';
 import 'package:ssr_parent_app/pages/home/home_page.dart';
@@ -25,7 +26,12 @@ class _SSRParentAppState extends State<SSRParentApp> {
        GoRoute(path: '/login', builder: (context, state)=>LoginPage()),
        GoRoute(path: '/register', builder: (context, state)=> SignupPage()),
        GoRoute(path: '/home', builder: (context, state)=> HomePage()),
-       GoRoute(path: '/child', builder: (context, state)=> ChildPage()),
+       GoRoute(path: '/child/:id', builder: (context, state){
+
+         final id = state.pathParameters['id']!;
+         return ChildPage(childId: id);
+       }),
+       GoRoute(path: '/route', builder: (context, state)=> RoutePage()),
 
 
      ]),
