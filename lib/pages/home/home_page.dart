@@ -99,28 +99,29 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Color(0xFF65558F)
             ),
           ),
-         Expanded(
-           child:StreamBuilder<QuerySnapshot>(
-               stream: _childService.getChildren(),
-               builder: (context,snapshot) {
-                 if (snapshot.hasError) {
-                   return Text('Error: ${snapshot.error}');
-                 }
-                 if (snapshot.connectionState == ConnectionState.waiting) {
-                   return CircularProgressIndicator();
-                 }
-                 final children = snapshot.data!.docs;
-                 return ListView.builder(
-                   itemCount: children.length,
-                   itemBuilder: (context,index) {
-                     final child = children[index];
-                     return ChildListItem(dotColors: Colors.greenAccent, name: child['name'], id: child.id,);
-                   }
-                 );
-
-               }
-           ),
-         )
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+                stream: _childService.getChildren(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+                  final children = snapshot.data!.docs;
+                  return ListView.builder(
+                      itemCount: children.length,
+                      itemBuilder: (context, index) {
+                        final child = children[index];
+                        return ChildListItem(
+                          dotColors: Colors.greenAccent,
+                          name: child['name'],
+                          id: child.id,
+                        );
+                      });
+                }),
+          )
         ],
       )),
     );

@@ -52,9 +52,9 @@ class SignupPageState extends State<SignupPage> {
                 SizedBox(
                   height: 30,
                 ),
-                 Text(
-                 "Register",
-                  style: TextStyle(fontSize: 30,color: Colors.purple),
+                Text(
+                  "Register",
+                  style: TextStyle(fontSize: 30, color:Color(0xFF65558F)),
                 ),
                 SizedBox(
                   height: 100,

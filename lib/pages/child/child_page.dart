@@ -3,20 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:ssr_parent_app/components/route_list_item.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ssr_parent_app/service/child_service.dart';
+import 'package:ssr_parent_app/service/route_service.dart';
 
 class ChildPage extends StatefulWidget {
   final String childId;
+  late RouteService routeService;
 
-  const ChildPage({super.key, required this.childId});
+   ChildPage({super.key, required this.childId}){
+    routeService = RouteService(childId);
+  }
 
   @override
   State<ChildPage> createState() => ChildPageState();
 }
 
 class ChildPageState extends State<ChildPage> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Childs"),
+        leading: IconButton(onPressed: (){
+          context.go('/home');
+        }, icon: Icon(Icons.arrow_back)),
+      ),
       body: SafeArea(
         child: Center(
             child: FutureBuilder<DocumentSnapshot>(
@@ -80,19 +94,28 @@ class ChildPageState extends State<ChildPage> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              context.go("/route");
+                              context.go("/route/${widget.childId}");
                             },
                             child: const Text("ADD ROUTE"),
                           ),
-                          const RouteListItem(
-                            name: "Route 01",
-                          ),
-                          const RouteListItem(
-                            name: "Route 02",
-                          ),
-                          const RouteListItem(
-                            name: "Route 03",
-                          )
+                          Expanded(child: StreamBuilder(stream:widget.routeService.getRoutes() , builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            }
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            }
+                            final routes = snapshot.data!.docs;
+                            return ListView.builder(
+                                itemCount: routes.length,
+                                itemBuilder: (context, index) {
+                                  final route = routes[index];
+                                  return RouteListItem(
+                                    name: route['name'],
+                                  );
+                                });
+                          })),
+
                         ],
                       ),
                     );

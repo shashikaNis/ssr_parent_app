@@ -31,7 +31,11 @@ class _SSRParentAppState extends State<SSRParentApp> {
          final id = state.pathParameters['id']!;
          return ChildPage(childId: id);
        }),
-       GoRoute(path: '/route', builder: (context, state)=> RoutePage()),
+       GoRoute(path: '/route/:id', builder: (context, state) {
+
+        final id = state.pathParameters['id']!;
+        return RoutePage(childId: id);
+       }),
 
 
      ]),

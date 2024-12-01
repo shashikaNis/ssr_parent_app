@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+
   TextEditingController emailController = TextEditingController();
   TextEditingController PasswordController = TextEditingController();
 
@@ -50,7 +51,7 @@ class LoginPageState extends State<LoginPage> {
               ),
               Text(
                 "Login",
-                style:TextStyle(fontSize: 30,color:Colors.purple),
+                style:TextStyle(fontSize: 30,color:Color(0xFF65558F)),
               ),
               SizedBox(
                 height: 100,
