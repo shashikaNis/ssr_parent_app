@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -12,7 +14,10 @@ class ChildService {
 
   Future<void> addChild(String name) {
     try {
-      return getReference().add({'name': name});
+      final random = Random();
+      final otp = (100000 + random.nextInt(900000)).toString();
+      final childCode = "SSRC"+otp.toString();
+      return getReference().add({'name': name, 'childCode':childCode});
     } catch (e) {
       print(e);
       return Future.error(e);

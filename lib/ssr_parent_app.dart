@@ -8,6 +8,7 @@ import 'package:ssr_parent_app/pages/Signup/signup_page.dart';
 import 'package:ssr_parent_app/pages/child/child_page.dart';
 import 'package:ssr_parent_app/pages/home/home_page.dart';
 import 'package:ssr_parent_app/pages/login/login_page.dart';
+import 'package:ssr_parent_app/service/notification_service.dart';
 
 class SSRParentApp extends StatefulWidget {
   const SSRParentApp({super.key});
@@ -17,6 +18,13 @@ class SSRParentApp extends StatefulWidget {
 }
 
 class _SSRParentAppState extends State<SSRParentApp> {
+
+  final NotificationService _notificationService = NotificationService();
+  @override
+  void initState() {
+    super.initState();
+    _notificationService.initialize();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

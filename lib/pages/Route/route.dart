@@ -50,7 +50,7 @@ class RoutePageState extends State<RoutePage> {
   }
 
   Future<void> _getRoute() async {
-    /// methana wela tinne api goofle Direction api aka connect karala tiyenne
+    /// methana wela tinne api google Direction API aka connect karala tiyenne
     GoogleMapsDirections.init(
         googleAPIKey: 'AIzaSyC3WMm0zAfOa80jYCf3HXGdsXjWNFCBGQ8');
 
@@ -152,7 +152,10 @@ class RoutePageState extends State<RoutePage> {
                 ),
                 ElevatedButton(
                   onPressed: _saveRoute,
-                  child: const Text("ADD ROUTE"),
+                  child: const Text("ADD ROUTE",style:TextStyle(color:Colors.white),),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:Color(0xFF65558F)
+                  ),
                 ),
               ],
             ),

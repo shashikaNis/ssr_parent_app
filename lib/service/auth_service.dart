@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -26,15 +28,27 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       CollectionReference user = FirebaseFirestore.instance.collection('users');
+
+      final random = Random();
+      final otp = (100000 + random.nextInt(900000)).toString();
+      final parentCode = "SSRP"+otp.toString();
+
       user.doc(FirebaseAuth.instance.currentUser!.uid).set({
         'email':email,
         'fullName':fullName,
         'phone':phoneNumber,
         'uid':
         FirebaseAuth.instance.currentUser!.uid,
+        'parentCode':parentCode
       });
     } catch (e) {
       print(e);
     }
   }
+  static getFirestoreUser() async{
+    final user = FirebaseAuth.instance.currentUser;
+    final userData = await FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
+    return userData;
+  }
+
 }

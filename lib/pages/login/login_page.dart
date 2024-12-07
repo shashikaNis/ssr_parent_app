@@ -14,6 +14,7 @@ class LoginPageState extends State<LoginPage> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController PasswordController = TextEditingController();
+  bool isPasswordHidden = true;
 
   @override
   void initState() {
@@ -71,9 +72,15 @@ class LoginPageState extends State<LoginPage> {
                       height: 20,
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      obscureText: isPasswordHidden,
+                      decoration: InputDecoration(
                         labelText: "Password",
                         border: OutlineInputBorder(),
+                        suffixIcon: IconButton(onPressed: (){
+                          setState(() {
+                            isPasswordHidden = !isPasswordHidden;
+                          });
+                        }, icon: Icon(isPasswordHidden? Icons.visibility: Icons.visibility_off))
                       ),
                       controller: PasswordController,
                     ),

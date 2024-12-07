@@ -39,21 +39,31 @@ class _HomePageState extends State<HomePage> {
       if (user == null) {
         context.go("/login");
         print('User is currently signed out!');
+        return;
       } else {
         print('User is signed in!');
       }
     });
+    setChildrenLocation();
     super.initState();
   }
 
-  static Set<Marker> markers = {
-    Marker(
-        markerId: MarkerId("child_id_01"),
-        position: LatLng(8.0000000, 80.7001093)),
-    Marker(
-        markerId: MarkerId("child_id_02"),
-        position: LatLng(8.0000000, 79.5005093)),
-  };
+  static Set<Marker> markers = {};
+
+  setChildrenLocation() {
+    _childService.getChildren().listen((children) {
+      for (var child in children.docs) {
+        GeoPoint? location = child["location"];
+        if (location != null) {
+          setState(() {
+            markers.add(Marker(
+                markerId: MarkerId(child.id),
+                position: LatLng(location.latitude, location.longitude)));
+          });
+        }
+      }
+    });
+  }
 
   onclickLogout() {
     AuthService.logout();
@@ -89,15 +99,16 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           ElevatedButton(
-            onPressed:onclickLogout,
+            onPressed: onclickLogout,
             child: Text("LogOut"),
           ),
           ElevatedButton(
-            onPressed:()=>showAddChildDialog(context),
-            child: Text("ADD CHILD",style: TextStyle(color: Colors.white),),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF65558F)
+            onPressed: () => showAddChildDialog(context),
+            child: Text(
+              "ADD CHILD",
+              style: TextStyle(color: Colors.white),
             ),
+            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF65558F)),
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -107,7 +118,13 @@ class _HomePageState extends State<HomePage> {
                     return Text('Error: ${snapshot.error}');
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Center(
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   }
                   final children = snapshot.data!.docs;
                   return ListView.builder(

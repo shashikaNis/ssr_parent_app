@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ssr_parent_app/components/route_list_item.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ssr_parent_app/service/auth_service.dart';
 import 'package:ssr_parent_app/service/child_service.dart';
 import 'package:ssr_parent_app/service/route_service.dart';
 
@@ -19,6 +20,17 @@ class ChildPage extends StatefulWidget {
 
 class ChildPageState extends State<ChildPage> {
 
+  String parentCode ="";
+@override
+  void initState() {
+    AuthService.getFirestoreUser().then((value){
+      var parentData = value.data();
+      setState(() {
+        parentCode = parentData["parentCode"];
+      });
+    });
+    super.initState();
+  }
 
 
 
@@ -40,7 +52,7 @@ class ChildPageState extends State<ChildPage> {
                   /// show loading indicator while data loading
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: SizedBox(height: 50, width: 50,child: CircularProgressIndicator(),),
                     );
                   }
                   /// show error message when data loading failed
@@ -66,7 +78,7 @@ class ChildPageState extends State<ChildPage> {
                           const Image(
                             image: AssetImage("assets/images/ssr_logo.png"),
                           ),
-                           Text(childDetails['name']),
+                           Text(childDetails['name'], style: TextStyle(fontSize: 30),),
                           Container(
                             width: 300,
                             height: 200,
@@ -79,15 +91,21 @@ class ChildPageState extends State<ChildPage> {
                                   BorderRadius.all(Radius.circular(10)),
                               color: Colors.grey,
                             ),
-                            child: const Center(
+                            child:  Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("Device Code"),
-                                  SizedBox(
+                                  const Text("Parent Code"),
+                                  const SizedBox(
                                     height: 15,
                                   ),
-                                  Text("SSR000123"),
+                                  Text(parentCode),
+                                  const SizedBox(height: 30,),
+                                  const Text("Child Code"),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(childDetails['childCode'])
                                 ],
                               ),
                             ),
@@ -96,14 +114,19 @@ class ChildPageState extends State<ChildPage> {
                             onPressed: () {
                               context.go("/route/${widget.childId}");
                             },
-                            child: const Text("ADD ROUTE"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF65558F)
+                            ),
+                            child: const Text("ADD ROUTE",style: TextStyle(color:Colors.white),),
                           ),
                           Expanded(child: StreamBuilder(stream:widget.routeService.getRoutes() , builder: (context, snapshot) {
                             if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             }
                             if (snapshot.connectionState == ConnectionState.waiting) {
-                              return CircularProgressIndicator();
+                              return const Center(
+                                child: SizedBox(height: 50, width: 50,child: CircularProgressIndicator(),),
+                             );
                             }
                             final routes = snapshot.data!.docs;
                             return ListView.builder(
